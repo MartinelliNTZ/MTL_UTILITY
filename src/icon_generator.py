@@ -90,6 +90,23 @@ def create_icon_pixmap(icon_name: str, size: int = 24, color: str = "#0e639c") -
                 <rect x="3" y="15" width="8" height="4" rx="1" stroke="rgba(255,255,255,0.15)" stroke-width="0.5" fill="none"/>
                 <rect x="13" y="15" width="8" height="4" rx="1" stroke="rgba(255,255,255,0.15)" stroke-width="0.5" fill="none"/>
             </svg>
+        ''',
+        "ico_converter": f'''
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="{size}" height="{size}">
+                <defs>
+                    <linearGradient id="icoGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" style="stop-color:#dcdcaa;stop-opacity:1" />
+                        <stop offset="100%" style="stop-color:#b8a85a;stop-opacity:1" />
+                    </linearGradient>
+                </defs>
+                <rect x="2" y="2" width="20" height="20" rx="2" fill="url(#icoGrad)"/>
+                <rect x="2.5" y="2.5" width="19" height="19" rx="1.5" stroke="rgba(255,255,255,0.2)" stroke-width="0.5" fill="none"/>
+                <circle cx="8" cy="8" r="2" fill="white" opacity="0.9"/>
+                <circle cx="16" cy="8" r="2" fill="white" opacity="0.9"/>
+                <circle cx="8" cy="16" r="2" fill="white" opacity="0.9"/>
+                <circle cx="16" cy="16" r="2" fill="white" opacity="0.9"/>
+                <text x="12" y="14" text-anchor="middle" fill="white" font-size="6" font-weight="bold">ICO</text>
+            </svg>
         '''
     }
     

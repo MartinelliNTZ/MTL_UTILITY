@@ -23,20 +23,15 @@ class PluginManager:
             # Running in PyInstaller bundle
             base_path = Path(sys._MEIPASS)
             plugins_path = base_path / self.plugins_dir
-            print(f"DEBUG: Running in PyInstaller bundle, base_path: {base_path}, plugins_path: {plugins_path}")
         else:
             # Running in development
             base_path = Path.cwd()
             plugins_path = self.plugins_dir
-            print(f"DEBUG: Running in development, base_path: {base_path}, plugins_path: {plugins_path}")
 
         logger.info(self.TOOL_KEY, "PluginManager", f"Procurando plugins em: {plugins_path}")
-        print(f"DEBUG: plugins_path exists: {plugins_path.exists()}")
 
         if not plugins_path.exists():
             logger.warning(self.TOOL_KEY, "PluginManager", f"Diretório de plugins não encontrado: {plugins_path}")
-            print(f"DEBUG: plugins_path does not exist: {plugins_path}")
-            print(f"DEBUG: Contents of base_path: {list(base_path.iterdir()) if base_path.exists() else 'base_path does not exist'}")
             return
 
         # Ensure base path is on sys.path so plugin modules can import src
@@ -48,7 +43,6 @@ class PluginManager:
         for file in plugins_path.glob("*.py"):
             if file.name.startswith("__"):
                 continue
-            print(f"DEBUG: Found plugin file: {file.name}")
             try:
                 logger.debug(self.TOOL_KEY, "PluginManager", f"Carregando plugin: {file.name}")
                 spec = importlib.util.spec_from_file_location(file.stem, str(file))

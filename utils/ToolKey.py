@@ -15,6 +15,7 @@ class ToolKey:
     TODO_LIST = "todo_list"
     SIMPLE_BROWSER = "simple_browser"
     TEXT_VIEWER = "text_viewer"
+    ICO_CONVERTER = "ico_converter"
 
     # Outros componentes
     MAIN_WINDOW = "main_window"
