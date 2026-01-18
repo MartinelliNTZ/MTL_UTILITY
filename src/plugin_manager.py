@@ -17,17 +17,40 @@ class PluginManager:
 
     def load_plugins(self):
         self.plugins.clear()
-        if not self.plugins_dir.exists():
-            return
-        # Ensure project root is on sys.path so plugin modules can import src
-        project_root = str(Path.cwd())
-        if project_root not in sys.path:
-            sys.path.insert(0, project_root)
 
-        for file in self.plugins_dir.glob("*.py"):
+        # Handle PyInstaller bundle
+        if getattr(sys, '_MEIPASS', False):
+            # Running in PyInstaller bundle
+            base_path = Path(sys._MEIPASS)
+            plugins_path = base_path / self.plugins_dir
+            print(f"DEBUG: Running in PyInstaller bundle, base_path: {base_path}, plugins_path: {plugins_path}")
+        else:
+            # Running in development
+            base_path = Path.cwd()
+            plugins_path = self.plugins_dir
+            print(f"DEBUG: Running in development, base_path: {base_path}, plugins_path: {plugins_path}")
+
+        logger.info(self.TOOL_KEY, "PluginManager", f"Procurando plugins em: {plugins_path}")
+        print(f"DEBUG: plugins_path exists: {plugins_path.exists()}")
+
+        if not plugins_path.exists():
+            logger.warning(self.TOOL_KEY, "PluginManager", f"Diretório de plugins não encontrado: {plugins_path}")
+            print(f"DEBUG: plugins_path does not exist: {plugins_path}")
+            print(f"DEBUG: Contents of base_path: {list(base_path.iterdir()) if base_path.exists() else 'base_path does not exist'}")
+            return
+
+        # Ensure base path is on sys.path so plugin modules can import src
+        base_str = str(base_path)
+        if base_str not in sys.path:
+            sys.path.insert(0, base_str)
+            logger.info(self.TOOL_KEY, "PluginManager", f"Adicionado ao sys.path: {base_str}")
+
+        for file in plugins_path.glob("*.py"):
             if file.name.startswith("__"):
                 continue
+            print(f"DEBUG: Found plugin file: {file.name}")
             try:
+                logger.debug(self.TOOL_KEY, "PluginManager", f"Carregando plugin: {file.name}")
                 spec = importlib.util.spec_from_file_location(file.stem, str(file))
                 mod = importlib.util.module_from_spec(spec)
                 spec.loader.exec_module(mod)
@@ -35,8 +58,13 @@ class PluginManager:
                     plugin = mod.get_plugin()
                     if isinstance(plugin, BasePlugin):
                         self.plugins[plugin.name] = plugin
+                        logger.info(self.TOOL_KEY, "PluginManager", f"Plugin carregado: {plugin.name}")
+                else:
+                    logger.warning(self.TOOL_KEY, "PluginManager", f"Plugin {file.name} não tem função get_plugin")
             except Exception as exc:
-                print(f"Erro carregando plugin {file.name}: {exc}")
+                logger.error(self.TOOL_KEY, "PluginManager", f"Erro carregando plugin {file.name}: {exc}")
+
+        logger.info(self.TOOL_KEY, "PluginManager", f"Total de plugins carregados: {len(self.plugins)}")
 
     def get_plugin_names(self):
         return list(self.plugins.keys())

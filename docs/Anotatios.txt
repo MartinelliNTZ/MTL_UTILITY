@@ -1,32 +1,37 @@
-2.0.1
-- Abas arrastáveis com suporte à reordenação
-- Animações de UI (fade-in, hover, click)
-- Barra de ferramentas superior arrastável
-- Barra de tarefas inferior
-- Barra lateral configurável (dockable)
-- Comunicação entre componentes via sinais Qt
-- Componentes animados (botões, listas, toolbars)
-- Configurações mantidas automaticamente entre sessões
-- Geração automática de ícones
-- Gerenciamento de caminhos base para plugins
-- Interface responsiva com layouts adaptáveis
-- Logs estruturados por tool key e classe
-- Menu de logs disponível na seção Help
-- Pasta base configurável e persistente
-- Plugin de Calculadora com operações básicas
-- Plugin de Lista de Tarefas (Todo List)
-- Plugin de Navegador Web simples
-- Plugin de Visualizador de Texto com formatação
-- Preferências do usuário persistidas em arquivo JSON
-- Sistema de rotação automática de arquivos de log
-- Visualizador de logs com filtros avançados
 
-2.0.0
-- Arquitetura baseada em plugins extensível
-- Carregamento dinâmico de plugins
-- Gerenciador de plugins centralizado
-- Interface tipo Mini-IDE inspirada no Visual Studio
-- Navegador lateral para exploração de plugins disponíveis
-- Sistema de logging estruturado com rotação automática de arquivos
-- Sistema de plugins base com interface padronizada
-- Tema dark mode consistente em todo o sistema
+
+
+changeloh = 
+
+    2.0.1
+    - Abas arrastáveis com suporte à reordenação
+    - Animações de UI (fade-in, hover, click)
+    - Barra de ferramentas superior arrastável
+    - Barra de tarefas inferior
+    - Barra lateral configurável (dockable)
+    - Comunicação entre componentes via sinais Qt
+    - Componentes animados (botões, listas, toolbars)
+    - Configurações mantidas automaticamente entre sessões
+    - Geração automática de ícones
+    - Gerenciamento de caminhos base para plugins
+    - Interface responsiva com layouts adaptáveis
+    - Logs estruturados por tool key e classe
+    - Menu de logs disponível na seção Help
+    - Pasta base configurável e persistente
+    - Plugin de Calculadora com operações básicas
+    - Plugin de Lista de Tarefas (Todo List)
+    - Plugin de Navegador Web simples
+    - Plugin de Visualizador de Texto com formatação
+    - Preferências do usuário persistidas em arquivo JSON
+    - Sistema de rotação automática de arquivos de log
+    - Visualizador de logs com filtros avançados
+
+    2.0.0
+    - Arquitetura baseada em plugins extensível
+    - Carregamento dinâmico de plugins
+    - Gerenciador de plugins centralizado
+    - Interface tipo Mini-IDE inspirada no Visual Studio
+    - Navegador lateral para exploração de plugins disponíveis
+    - Sistema de logging estruturado com rotação automática de arquivos
+    - Sistema de plugins base com interface padronizada
+    - Tema dark mode consistente em todo o sistema

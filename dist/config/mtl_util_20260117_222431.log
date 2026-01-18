@@ -1,0 +1,4 @@
+{"timestamp": "2026-01-17 22:24:31", "level": "INFO", "tool_key": "system", "class_name": "LogUtils", "message": "Sistema de logging iniciado", "extra_data": {}}
+{"timestamp": "2026-01-17 22:24:31", "level": "INFO", "tool_key": "main_window", "class_name": "MainWindow", "message": "Aplicação MTL_UTIL iniciada", "extra_data": {}}
+{"timestamp": "2026-01-17 22:24:36", "level": "DEBUG", "tool_key": "main_window", "class_name": "MainWindow", "message": "Abrindo visualizador de logs", "extra_data": {}}
+{"timestamp": "2026-01-17 22:24:36", "level": "INFO", "tool_key": "main_window", "class_name": "LogViewer", "message": "Janela de visualização de logs aberta", "extra_data": {}}
