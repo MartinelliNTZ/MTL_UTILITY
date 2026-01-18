@@ -1,7 +1,7 @@
 import os
 import sys
 from pathlib import Path
-from typing import List
+from typing import List, Tuple
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from io import BytesIO
 from PIL import Image
@@ -262,6 +262,28 @@ class ICOConverter(BasePlugin, PluginContainer):
         except Exception as e:
             logger.error(self.TOOL_KEY, "ICOConverter", f"Erro ao carregar imagens: {e}")
 
+    def _create_thumbnail(self, file_path: str, size: tuple = (160, 120)) -> QPixmap:
+        """
+        Gera thumbnail de uma imagem.
+        
+        Args:
+            file_path: Caminho do arquivo de imagem
+            size: Tamanho do thumbnail (width, height)
+            
+        Returns:
+            QPixmap com a miniatura ou None se erro
+        """
+        try:
+            img = Image.open(file_path)
+            img.thumbnail(size, Image.LANCZOS)
+            bio = BytesIO()
+            img.convert("RGBA").save(bio, format="PNG")
+            qimg = QImage.fromData(bio.getvalue())
+            return QPixmap.fromImage(qimg)
+        except Exception as e:
+            logger.warning(self.TOOL_KEY, "ICOConverter", f"Erro ao gerar thumbnail: {e}")
+            return None
+
     def add_image_to_list(self, path: str) -> None:
         """Adiciona uma imagem à lista."""
         try:
@@ -269,14 +291,10 @@ class ICOConverter(BasePlugin, PluginContainer):
             item.setToolTip(path)
             item.setData(Qt.UserRole, path)
 
-            # Criar miniatura
-            img = Image.open(path)
-            img.thumbnail((160, 120), Image.LANCZOS)
-            bio = BytesIO()
-            img.convert("RGBA").save(bio, format="PNG")
-            qimg = QImage.fromData(bio.getvalue())
-            pix = QPixmap.fromImage(qimg)
-            item.setIcon(pix)
+            # Criar miniatura usando método auxiliar
+            pixmap = self._create_thumbnail(path)
+            if pixmap:
+                item.setIcon(pixmap)
 
             self.image_list.addItem(item)
         except Exception as e:
@@ -353,47 +371,68 @@ class ICOConverter(BasePlugin, PluginContainer):
         logger.info(self.TOOL_KEY, "ICOConverter",
                    f"Iniciada conversão de {len(images)} imagens para {output_dir}")
 
-    def convert_single_image(self, img_path: str, output_dir: str, sizes: List[int]) -> bool:
-        """Converte uma única imagem usando ImageUtil."""
-        base_name = os.path.splitext(os.path.basename(img_path))[0]
-        output_path = os.path.join(output_dir, f"{base_name}.ico")
-        return ImageUtil.convert_image_to_ico(img_path, output_path, sizes)
+    def convert_single_image(self, img_path: str, output_dir: str, sizes: List[int]) -> Tuple[bool, str]:
+        """
+        Converte uma única imagem para ICO.
+        
+        Args:
+            img_path: Caminho da imagem
+            output_dir: Pasta de saída
+            sizes: Tamanhos para o ICO
+            
+        Returns:
+            Tupla (sucesso, mensagem)
+        """
+        try:
+            base_name = os.path.splitext(os.path.basename(img_path))[0]
+            output_path = os.path.join(output_dir, f"{base_name}.ico")
+            
+            success = ImageUtil.convert_image_to_ico(img_path, output_path, sizes)
+            
+            if success:
+                return True, f"✓ {os.path.basename(img_path)}"
+            else:
+                return False, f"✗ Erro ao converter {os.path.basename(img_path)}"
+        except Exception as e:
+            return False, f"✗ {str(e)}"
 
     def check_conversion_progress(self) -> None:
         """Verifica o progresso da conversão."""
         completed = 0
         failed = 0
+        success_count = 0
 
         for future in self.conversion_futures:
             if future.done():
                 try:
-                    success = future.result()
+                    success, message = future.result()
+                    completed += 1
                     if success:
-                        completed += 1
-                    else:
-                        failed += 1
+                        success_count += 1
+                    logger.debug(self.TOOL_KEY, "ICOConverter", message)
                 except Exception as e:
+                    completed += 1
                     failed += 1
                     logger.error(self.TOOL_KEY, "ICOConverter", f"Erro na conversão: {e}")
 
-        self.progress_bar.setValue(completed + failed)
+        self.progress_bar.setValue(completed)
 
-        if completed + failed == len(self.conversion_futures):
+        if completed == len(self.conversion_futures):
             # Conversão completa
             self.progress_bar.setVisible(False)
             self.btn_convert.setEnabled(True)
 
-            if completed > 0:
+            if success_count > 0:
                 from PySide6.QtWidgets import QApplication
                 QMessageBox.information(
                     QApplication.activeWindow(), "Concluído",
-                    f"Conversão finalizada!\n{completed} imagens convertidas com sucesso.\n{failed} falhas."
+                    f"Conversão finalizada!\n{success_count} imagens convertidas com sucesso.\n{failed} falhas."
                 )
 
             logger.info(self.TOOL_KEY, "ICOConverter",
-                       f"Conversão concluída: {completed} sucesso, {failed} falhas")
+                       f"Conversão concluída: {success_count} sucesso, {failed} falhas")
         else:
-            # Ainda em progresso, verificar novamente
+            # Continuar monitorando
             QTimer.singleShot(100, self.check_conversion_progress)
 
     def on_base_path_changed(self, new_path: str) -> None:

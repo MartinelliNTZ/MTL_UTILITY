@@ -7,11 +7,12 @@ da aplicação, reduzindo duplicação de código entre plugins.
 
 from PySide6.QtWidgets import (
     QWidget, QVBoxLayout, QHBoxLayout, QLabel, 
-    QLineEdit, QPushButton, QTextEdit, QListWidget
+    QLineEdit, QPushButton, QTextEdit, QListWidget,
+    QGroupBox, QCheckBox
 )
 from PySide6.QtGui import QFont
 from PySide6.QtCore import Qt
-from typing import Optional, Callable, Tuple
+from typing import Optional, Callable, Tuple, Dict, List
 from src.animations import AnimatedButton
 from utils.ToolKey import ToolKey
 from utils.LogUtils import logger
@@ -327,6 +328,64 @@ class PluginUIHelper:
         b = max(0, int(b * (100 - percent) / 100))
         
         return f"#{r:02x}{g:02x}{b:02x}"
+    
+    @staticmethod
+    def create_groupbox(title: str, items: List[QWidget] = None) -> QGroupBox:
+        """
+        Cria um GroupBox padronizado com widgets.
+        
+        Args:
+            title: Título do grupo
+            items: Lista de widgets a adicionar (opcional)
+            
+        Returns:
+            QGroupBox estilizado
+        """
+        group = QGroupBox(title)
+        layout = QVBoxLayout(group)
+        layout.setContentsMargins(6, 10, 6, 6)
+        layout.setSpacing(3)
+        
+        if items:
+            for item in items:
+                layout.addWidget(item)
+        
+        return group
+    
+    @staticmethod
+    def create_checkbox_group(
+        name: str,
+        options: Dict[str, bool],
+        callback: Optional[Callable[[str, bool], None]] = None
+    ) -> Tuple[QGroupBox, Dict[str, QCheckBox]]:
+        """
+        Cria um grupo de checkboxes.
+        
+        Args:
+            name: Título do grupo
+            options: Dict {label: is_checked}
+            callback: Função(label, is_checked) chamada ao mudar
+            
+        Returns:
+            Tupla (QGroupBox, dict de checkboxes)
+        """
+        checkboxes = {}
+        items = []
+        
+        for label, checked in options.items():
+            cb = QCheckBox(label)
+            cb.setChecked(checked)
+            
+            if callback:
+                cb.stateChanged.connect(
+                    lambda state, lbl=label: callback(lbl, state == Qt.Checked)
+                )
+            
+            checkboxes[label] = cb
+            items.append(cb)
+        
+        group = PluginUIHelper.create_groupbox(name, items)
+        return group, checkboxes
 
 
 class PluginContainer:
