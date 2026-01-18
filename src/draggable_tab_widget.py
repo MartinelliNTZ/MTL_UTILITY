@@ -2,9 +2,13 @@ from PySide6.QtWidgets import QTabWidget
 from PySide6.QtCore import Qt, QMimeData
 from PySide6.QtGui import QDrag
 from src.animations import AnimatedTabBar
+from utils.ToolKey import ToolKey
+from utils.LogUtils import logger
 
 
 class DraggableTabBar(AnimatedTabBar):
+    """TabBar que permite reordenar abas via drag and drop."""
+    TOOL_KEY = ToolKey.DRAGGABLE_TAB
     """TabBar que permite reordenar abas via drag and drop."""
     
     def __init__(self, parent=None):

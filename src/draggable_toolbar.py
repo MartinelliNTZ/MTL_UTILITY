@@ -1,11 +1,15 @@
 from PySide6.QtWidgets import QToolBar
 from PySide6.QtGui import QAction, QIcon
 from PySide6.QtCore import Qt
-from typing import Callable
+from typing import Callable, Dict
 from src.animations import AnimatedToolButton, UIAnimations
+from utils.ToolKey import ToolKey
+from utils.LogUtils import logger
 
 
 class DraggableToolBar(QToolBar):
+    """Toolbar que permite reordenar ações via drag and drop."""
+    TOOL_KEY = ToolKey.DRAGGABLE_TOOLBAR
     """Toolbar que permite reordenar ações via drag and drop."""
     
     def __init__(self, title: str = "", parent=None):

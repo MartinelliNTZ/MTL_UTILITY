@@ -1,5 +1,9 @@
 from PySide6.QtGui import QPixmap, QColor
 from PySide6.QtCore import QByteArray
+from utils.ToolKey import ToolKey
+from utils.LogUtils import logger
+
+TOOL_KEY = ToolKey.ICON_GENERATOR
 
 
 def create_icon_pixmap(icon_name: str, size: int = 24, color: str = "#0e639c") -> QPixmap:

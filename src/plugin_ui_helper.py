@@ -13,9 +13,13 @@ from PySide6.QtGui import QFont
 from PySide6.QtCore import Qt
 from typing import Optional, Callable, Tuple
 from src.animations import AnimatedButton
+from utils.ToolKey import ToolKey
+from utils.LogUtils import logger
 
 
 class PluginStyleSheet:
+    """Constantes de estilo reutilizáveis."""
+    TOOL_KEY = ToolKey.SYSTEM  # Como é uma classe utilitária
     """Constantes de estilo reutilizáveis."""
     
     # Colors

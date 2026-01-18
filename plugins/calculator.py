@@ -1,17 +1,22 @@
 from PySide6.QtWidgets import QWidget, QVBoxLayout, QGridLayout
 from src.base_plugin import BasePlugin
 from src.plugin_ui_helper import PluginUIHelper, PluginContainer, PluginStyleSheet
+from utils.ToolKey import ToolKey
+from utils.LogUtils import logger
 
 
 class Calculator(BasePlugin, PluginContainer):
     name = "Calculator"
     icon_name = "calculator"
+    TOOL_KEY = ToolKey.CALCULATOR
     
     def __init__(self):
         BasePlugin.__init__(self)
         PluginContainer.__init__(self)
+        logger.info(self.TOOL_KEY, "Calculator", "Plugin Calculator inicializado")
 
     def create_widget(self, parent=None) -> QWidget:
+        logger.debug(self.TOOL_KEY, "Calculator", "Criando widget da calculadora")
         w = QWidget(parent)
         layout = QVBoxLayout(w)
         layout.setContentsMargins(20, 20, 20, 20)
@@ -48,9 +53,11 @@ class Calculator(BasePlugin, PluginContainer):
         # Botão Limpar
         clear_btn = PluginUIHelper.create_button("C (Limpar)", PluginStyleSheet.COLOR_DANGER)
         clear_btn.clicked.connect(lambda: display.setPlainText("0"))
+        clear_btn.clicked.connect(lambda: logger.info(self.TOOL_KEY, "Calculator", "Display limpo"))
         layout.addWidget(clear_btn)
         
         layout.addStretch()
+        logger.info(self.TOOL_KEY, "Calculator", "Widget da calculadora criado com sucesso")
         return w
     
     def _create_buttons_grid(self, layout: QVBoxLayout, display) -> None:
@@ -63,12 +70,16 @@ class Calculator(BasePlugin, PluginContainer):
         ]
         
         def button_click(val):
+            logger.debug(self.TOOL_KEY, "Calculator", f"Botão pressionado: {val}")
             if val == "=":
                 try:
-                    result = eval(display.toPlainText())
+                    expression = display.toPlainText()
+                    result = eval(expression)
                     display.setPlainText(str(result))
-                except:
+                    logger.info(self.TOOL_KEY, "Calculator", f"Cálculo executado: {expression} = {result}")
+                except Exception as e:
                     display.setPlainText("Erro")
+                    logger.error(self.TOOL_KEY, "Calculator", f"Erro no cálculo: {expression} - {str(e)}")
             else:
                 current = display.toPlainText()
                 if current == "0":

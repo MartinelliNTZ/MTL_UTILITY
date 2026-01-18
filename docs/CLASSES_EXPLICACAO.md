@@ -2,6 +2,15 @@
 
 Este documento explica rapidamente o que cada classe em `src/` faz, para iniciantes em Python.
 
+## Preferences (agora em config/)
+Salva e carrega configurações em um arquivo JSON (como a pasta base). Permite get/set de valores, salvando automaticamente.
+
+## ToolKey (em utils/)
+Contém identificadores únicos para cada componente do sistema. Cada classe tem um TOOL_KEY para identificação em logs.
+
+## LogUtils (em utils/)
+Sistema de logging que salva todas as interações em arquivos JSON na pasta config/. Cria novo arquivo a cada execução, mantendo apenas 2 arquivos (atual e último).
+
 ## BasePlugin
 Classe base que todos os plugins devem herdar. Define métodos como `create_widget()` (cria a interface do plugin) e `on_base_path_changed()` (chamado quando a pasta muda).
 
@@ -10,9 +19,6 @@ Gerencia o carregamento de plugins. Procura arquivos Python na pasta `plugins/`,
 
 ## MainWindow
 A janela principal da aplicação. Contém menus, barras de ferramentas, área de abas e painel lateral. Coordena tudo: abre plugins, muda configurações, etc.
-
-## Preferences (agora em config/)
-Salva e carrega configurações em um arquivo JSON (como a pasta base). Permite get/set de valores, salvando automaticamente.
 
 ## SignalManager
 Sistema de comunicação entre partes da app. Usa sinais Qt para notificar quando algo muda (ex: pasta base alterada), permitindo plugins reagirem.

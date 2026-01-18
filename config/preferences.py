@@ -1,9 +1,13 @@
 import json
 from pathlib import Path
 from typing import Any, Dict
+from utils.ToolKey import ToolKey
+from utils.LogUtils import logger
 
 
 class Preferences:
+    """Gerencia preferências da aplicação salvas em JSON."""
+    TOOL_KEY = ToolKey.PREFERENCES
     """Gerencia preferências da aplicação salvas em JSON."""
     
     def __init__(self, config_file: str = "config/config.json"):

@@ -1,4 +1,8 @@
 # Stylesheet Dark Mode - Inspirado em Visual Studio, QGIS e IntelliJ
+from utils.ToolKey import ToolKey
+from utils.LogUtils import logger
+
+TOOL_KEY = ToolKey.THEME
 
 DARK_STYLESHEET = """
 QMainWindow {

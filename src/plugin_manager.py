@@ -4,9 +4,12 @@ from pathlib import Path
 from typing import Dict
 
 from src.base_plugin import BasePlugin
+from utils.ToolKey import ToolKey
+from utils.LogUtils import logger
 
 
 class PluginManager:
+    TOOL_KEY = ToolKey.PLUGIN_MANAGER
     def __init__(self, plugins_dir: str = "plugins"):
         self.plugins_dir = Path(plugins_dir)
         self.plugins: Dict[str, BasePlugin] = {}

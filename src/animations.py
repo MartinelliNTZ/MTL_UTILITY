@@ -8,9 +8,13 @@ from PySide6.QtCore import QPropertyAnimation, QEasingCurve, QSequentialAnimatio
 from PySide6.QtGui import QColor
 from PySide6.QtWidgets import QWidget, QPushButton, QToolButton, QTabBar, QListWidget, QListWidgetItem
 from typing import Optional
+from utils.ToolKey import ToolKey
+from utils.LogUtils import logger
 
 
 class UIAnimations:
+    """Collection of UI animation utilities."""
+    TOOL_KEY = ToolKey.ANIMATIONS
     """Collection of UI animation utilities."""
 
     @staticmethod

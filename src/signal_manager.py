@@ -1,8 +1,12 @@
 from PySide6.QtCore import QObject, Signal
 from typing import Callable, Dict, List
+from utils.ToolKey import ToolKey
+from utils.LogUtils import logger
 
 
 class SignalManager(QObject):
+    """Gerencia sinais/eventos para comunicação entre main window e plugins."""
+    TOOL_KEY = ToolKey.SIGNAL_MANAGER
     """Gerencia sinais/eventos para comunicação entre main window e plugins."""
     
     # Sinais

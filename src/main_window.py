@@ -18,17 +18,24 @@ from PySide6.QtCore import Qt, QSize
 
 from src.plugin_manager import PluginManager
 from src.icon_generator import create_icon_pixmap
-from src.draggable_toolbar import DraggableToolBar
+from src.animations import AnimatedToolButton, AnimatedButton, AnimatedListWidget, UIAnimations
 from src.draggable_tab_widget import DraggableTabWidget
+from src.draggable_toolbar import DraggableToolBar
+from src.log_viewer import LogViewer
 from config.preferences import Preferences
 from src.signal_manager import SignalManager
 from src.theme import DARK_STYLESHEET
-from src.animations import AnimatedButton, AnimatedToolButton, UIAnimations, AnimatedListWidget
+
+
+from utils.ToolKey import ToolKey
+from utils.LogUtils import logger
 
 
 class MainWindow(QMainWindow):
+    TOOL_KEY = ToolKey.MAIN_WINDOW
     def __init__(self):
         super().__init__()
+        logger.info(self.TOOL_KEY, "MainWindow", "Aplicação MTL_UTIL iniciada")
         self.setWindowTitle("Mini-IDE Inspirado no Visual Studio")
         self.resize(1200, 800)
 
@@ -68,6 +75,10 @@ class MainWindow(QMainWindow):
         about_action = QAction("About", self)
         about_action.triggered.connect(self._show_about)
         help_menu.addAction(about_action)
+
+        logs_action = QAction("Logs", self)
+        logs_action.triggered.connect(self._show_logs)
+        help_menu.addAction(logs_action)
 
     def _create_plugins_toolbar(self):
         """Cria a barra de ferramentas com ícones dos plugins na parte superior."""
@@ -110,16 +121,19 @@ class MainWindow(QMainWindow):
 
     def _open_plugin(self, plugin_name: str):
         """Abre um plugin quando o ícone é clicado. Se já estiver aberto, ativa a aba."""
+        logger.debug(self.TOOL_KEY, "MainWindow", f"Tentativa de abrir plugin: {plugin_name}")
         # Verifica se o plugin já está aberto
         for i in range(self.tab_widget.count()):
             if self.tab_widget.tabText(i) == plugin_name:
                 # Plugin já está aberto, ativa a aba
                 self.tab_widget.setCurrentIndex(i)
+                logger.info(self.TOOL_KEY, "MainWindow", f"Plugin {plugin_name} já estava aberto, aba ativada")
                 return
         
         # Se não estiver aberto, cria novo
         widget = self.plugin_manager.create_widget_for(plugin_name, parent=self)
         if widget is None:
+            logger.error(self.TOOL_KEY, "MainWindow", f"Falha ao criar widget para plugin {plugin_name}")
             QMessageBox.warning(self, "Erro", f"Não foi possível abrir plugin {plugin_name}")
             return
         
@@ -131,6 +145,7 @@ class MainWindow(QMainWindow):
         
         # Registra o widget do plugin para notificações futuras
         self.open_plugins[plugin_name] = widget
+        logger.info(self.TOOL_KEY, "MainWindow", f"Plugin {plugin_name} aberto com sucesso")
         
         # Envia a pasta base atual para o novo plugin
         self._notify_plugin_base_path(widget, plugin_name)
@@ -238,6 +253,7 @@ class MainWindow(QMainWindow):
 
     def _change_base_path(self):
         """Abre o diálogo para escolher uma nova pasta base."""
+        logger.debug(self.TOOL_KEY, "MainWindow", "Diálogo de mudança de pasta base aberto")
         current_path = self.preferences.get_base_path()
         
         new_path = QFileDialog.getExistingDirectory(
@@ -248,12 +264,15 @@ class MainWindow(QMainWindow):
         )
         
         if new_path:
+            logger.info(self.TOOL_KEY, "MainWindow", f"Pasta base alterada de '{current_path}' para '{new_path}'")
             # Salva a nova pasta base
             self.preferences.set_base_path(new_path)
             self.base_path_display.setText(new_path)
             
             # Emite sinal para todos os plugins
             self._notify_all_plugins_base_path_changed(new_path)
+        else:
+            logger.debug(self.TOOL_KEY, "MainWindow", "Mudança de pasta base cancelada pelo usuário")
     
     def _notify_plugin_base_path(self, widget: QWidget, plugin_name: str) -> None:
         """Notifica um plugin individual sobre o caminho base."""
@@ -289,3 +308,9 @@ class MainWindow(QMainWindow):
 
     def _show_about(self):
         QMessageBox.information(self, "About", "Mini-IDE exemplo inspirado no Visual Studio\nFeito com PySide6")
+
+    def _show_logs(self):
+        """Abre a janela de visualização de logs."""
+        logger.debug(self.TOOL_KEY, "MainWindow", "Abrindo visualizador de logs")
+        viewer = LogViewer(self)
+        viewer.exec()
