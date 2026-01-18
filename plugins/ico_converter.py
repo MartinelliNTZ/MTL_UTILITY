@@ -16,7 +16,9 @@ from PySide6.QtCore import Qt, QTimer, QSize
 
 from src.base_plugin import BasePlugin
 from src.plugin_ui_helper import PluginUIHelper, PluginContainer, PluginStyleSheet
-from src.ico_converter_util import ICOConverterUtil
+from src.styles.ICOConverterStyles import ICOConverterStyles
+from utils.ImageUtil import ImageUtil, ImageFormats
+from utils.FileExplorer import FileExplorer
 from utils.ToolKey import ToolKey
 from utils.LogUtils import logger
 
@@ -32,6 +34,7 @@ class ICOConverter(BasePlugin, PluginContainer):
         self.preferences = None
         self.current_folder = None
         self.executor = None
+        self.file_explorer = None
         logger.info(self.TOOL_KEY, "ICOConverter", "Plugin ICO Converter inicializado")
 
     def create_widget(self, parent=None) -> QWidget:
@@ -44,6 +47,8 @@ class ICOConverter(BasePlugin, PluginContainer):
             self.current_folder = self.preferences.get("ico_converter_current_folder", self.preferences.get_base_path())
             from concurrent.futures import ThreadPoolExecutor
             self.executor = ThreadPoolExecutor(max_workers=4)
+            # Inicializar FileExplorer com extensões suportadas
+            self.file_explorer = FileExplorer(ImageFormats.get_supported_extensions(), recursive=True)
         
         w = QWidget(parent)
         layout = QVBoxLayout(w)
@@ -55,12 +60,7 @@ class ICOConverter(BasePlugin, PluginContainer):
 
         # Splitter principal: lista (85%) | controles (15%)
         splitter = QSplitter(Qt.Horizontal)
-        splitter.setStyleSheet("""
-            QSplitter::handle {
-                background-color: #3e3e3e;
-                width: 1px;
-            }
-        """)
+        splitter.setStyleSheet(ICOConverterStyles.get_splitter_style())
         layout.addWidget(splitter, 1)
 
         # Lista de imagens (principal)
@@ -87,23 +87,14 @@ class ICOConverter(BasePlugin, PluginContainer):
 
         # Label da pasta
         self.folder_label = QLabel(self.current_folder)
-        self.folder_label.setStyleSheet("""
-            QLabel {
-                background-color: #2d2d30;
-                color: #cccccc;
-                border: 1px solid #3e3e3e;
-                padding: 6px 8px;
-                border-radius: 3px;
-                font-size: 9pt;
-            }
-        """)
+        self.folder_label.setStyleSheet(ICOConverterStyles.get_folder_label_style())
         folder_layout.addWidget(self.folder_label, 1)
 
         # Botão Selecionar Arquivo
         btn_select_file = QPushButton("📄 Arquivo")
         btn_select_file.setMinimumHeight(28)
         btn_select_file.setMaximumWidth(90)
-        btn_select_file.setStyleSheet(self._get_button_style("#0e639c"))
+        btn_select_file.setStyleSheet(ICOConverterStyles.get_button_style())
         btn_select_file.clicked.connect(self.add_files_dialog)
         folder_layout.addWidget(btn_select_file)
 
@@ -111,7 +102,7 @@ class ICOConverter(BasePlugin, PluginContainer):
         btn_select_folder = QPushButton("📁 Pasta")
         btn_select_folder.setMinimumHeight(28)
         btn_select_folder.setMaximumWidth(90)
-        btn_select_folder.setStyleSheet(self._get_button_style("#0e639c"))
+        btn_select_folder.setStyleSheet(ICOConverterStyles.get_button_style())
         btn_select_folder.clicked.connect(self.select_folder)
         folder_layout.addWidget(btn_select_folder)
 
@@ -119,7 +110,7 @@ class ICOConverter(BasePlugin, PluginContainer):
         btn_reset = QPushButton("↻ Resetar")
         btn_reset.setMinimumHeight(28)
         btn_reset.setMaximumWidth(90)
-        btn_reset.setStyleSheet(self._get_button_style("#0e639c"))
+        btn_reset.setStyleSheet(ICOConverterStyles.get_button_style())
         btn_reset.clicked.connect(self.reset_to_base_folder)
         folder_layout.addWidget(btn_reset)
 
@@ -135,22 +126,7 @@ class ICOConverter(BasePlugin, PluginContainer):
         self.image_list = QListWidget()
         self.image_list.setIconSize(QSize(100, 80))
         self.image_list.setSpacing(8)
-        self.image_list.setStyleSheet("""
-            QListWidget {
-                background-color: #2d2d30;
-                color: #cccccc;
-                border: 1px solid #3e3e3e;
-                border-radius: 4px;
-                outline: none;
-            }
-            QListWidget::item:selected {
-                background-color: #094771;
-                border-left: 3px solid #0e639c;
-            }
-            QListWidget::item:hover {
-                background-color: #3e3e42;
-            }
-        """)
+        self.image_list.setStyleSheet(ICOConverterStyles.get_image_list_style())
         list_layout.addWidget(self.image_list, 1)
 
         # Botões compactos
@@ -161,7 +137,7 @@ class ICOConverter(BasePlugin, PluginContainer):
         btn_refresh.setMinimumHeight(28)
         btn_refresh.setMaximumWidth(40)
         btn_refresh.setToolTip("Atualizar")
-        btn_refresh.setStyleSheet(self._get_button_style("#0e639c"))
+        btn_refresh.setStyleSheet(ICOConverterStyles.get_button_style())
         btn_refresh.clicked.connect(self.load_images_from_current_folder)
         btn_layout.addWidget(btn_refresh)
 
@@ -169,7 +145,7 @@ class ICOConverter(BasePlugin, PluginContainer):
         btn_clear.setMinimumHeight(28)
         btn_clear.setMaximumWidth(40)
         btn_clear.setToolTip("Limpar")
-        btn_clear.setStyleSheet(self._get_button_style("#0e639c"))
+        btn_clear.setStyleSheet(ICOConverterStyles.get_button_style())
         btn_clear.clicked.connect(self.clear_image_list)
         btn_layout.addWidget(btn_clear)
 
@@ -187,46 +163,7 @@ class ICOConverter(BasePlugin, PluginContainer):
         control_layout.setContentsMargins(8, 8, 8, 8)
         control_layout.setSpacing(8)
 
-        control_widget.setStyleSheet("""
-            QWidget {
-                background-color: #252526;
-                color: #cccccc;
-            }
-            QGroupBox {
-                background-color: #2d2d30;
-                color: #cccccc;
-                border: 1px solid #3e3e3e;
-                border-radius: 3px;
-                margin-top: 8px;
-                padding-top: 8px;
-                font-weight: 600;
-                font-size: 9pt;
-            }
-            QGroupBox::title {
-                subcontrol-origin: margin;
-                subcontrol-position: top left;
-                padding: 0 4px;
-            }
-            QCheckBox {
-                color: #cccccc;
-                spacing: 4px;
-                font-size: 9pt;
-            }
-            QCheckBox::indicator {
-                width: 16px;
-                height: 16px;
-            }
-            QCheckBox::indicator:unchecked {
-                background-color: #3e3e3e;
-                border: 1px solid #555555;
-                border-radius: 2px;
-            }
-            QCheckBox::indicator:checked {
-                background-color: #0e639c;
-                border: 1px solid #0e639c;
-                border-radius: 2px;
-            }
-        """)
+        control_widget.setStyleSheet(ICOConverterStyles.get_control_panel_style())
 
         # ===== SEÇÃO: TAMANHOS =====
         size_group = QGroupBox("Tamanhos (px)")
@@ -266,7 +203,7 @@ class ICOConverter(BasePlugin, PluginContainer):
         self.btn_convert = QPushButton("🔄 Converter")
         self.btn_convert.setMinimumHeight(36)
         self.btn_convert.setFont(QFont("Arial", 10, QFont.Bold))
-        self.btn_convert.setStyleSheet(self._get_button_style("#0e639c", hover="#0a4a7a", pressed="#082f52"))
+        self.btn_convert.setStyleSheet(ICOConverterStyles.get_button_style())
         self.btn_convert.clicked.connect(self.start_conversion)
         control_layout.addWidget(self.btn_convert)
 
@@ -274,50 +211,12 @@ class ICOConverter(BasePlugin, PluginContainer):
         self.progress_bar = QProgressBar()
         self.progress_bar.setMinimumHeight(18)
         self.progress_bar.setVisible(False)
-        self.progress_bar.setStyleSheet("""
-            QProgressBar {
-                background-color: #3e3e3e;
-                border: 1px solid #555555;
-                border-radius: 3px;
-                text-align: center;
-                color: #cccccc;
-                font-size: 8pt;
-            }
-            QProgressBar::chunk {
-                background-color: #0e639c;
-                border-radius: 2px;
-            }
-        """)
+        self.progress_bar.setStyleSheet(ICOConverterStyles.get_progress_bar_style())
         control_layout.addWidget(self.progress_bar)
 
         control_layout.addStretch()
         splitter.addWidget(control_widget)
         splitter.setSizes([850, 200])
-
-    def _get_button_style(self, color: str, hover: str = None, pressed: str = None) -> str:
-        """Retorna o stylesheet para botões."""
-        if hover is None:
-            hover = "#0a4a7a"
-        if pressed is None:
-            pressed = "#082f52"
-        
-        return f"""
-            QPushButton {{
-                background-color: {color};
-                color: #cccccc;
-                border: none;
-                border-radius: 4px;
-                font-weight: 600;
-                font-size: 10pt;
-                padding: 6px 12px;
-            }}
-            QPushButton:hover {{
-                background-color: {hover};
-            }}
-            QPushButton:pressed {{
-                background-color: {pressed};
-            }}
-        """
 
     def _on_checkbox_changed(self, size: int, state) -> None:
         """Callback quando checkboxes mudam."""
@@ -350,12 +249,12 @@ class ICOConverter(BasePlugin, PluginContainer):
         self.preferences.set("ico_converter_current_folder", folder)
 
     def load_images_from_current_folder(self) -> None:
-        """Carrega imagens da pasta atual."""
+        """Carrega imagens da pasta atual usando FileExplorer."""
         logger.info(self.TOOL_KEY, "ICOConverter", f"Carregando imagens de: {self.current_folder}")
         self.image_list.clear()
 
         try:
-            images = ICOConverterUtil.find_images_in_folder(self.current_folder, recursive=True)
+            images = self.file_explorer.find_files(self.current_folder)
             for img_path in images:
                 self.add_image_to_list(img_path)
 
@@ -455,10 +354,10 @@ class ICOConverter(BasePlugin, PluginContainer):
                    f"Iniciada conversão de {len(images)} imagens para {output_dir}")
 
     def convert_single_image(self, img_path: str, output_dir: str, sizes: List[int]) -> bool:
-        """Converte uma única imagem."""
+        """Converte uma única imagem usando ImageUtil."""
         base_name = os.path.splitext(os.path.basename(img_path))[0]
         output_path = os.path.join(output_dir, f"{base_name}.ico")
-        return ICOConverterUtil.convert_image_to_ico(img_path, output_path, sizes)
+        return ImageUtil.convert_image_to_ico(img_path, output_path, sizes)
 
     def check_conversion_progress(self) -> None:
         """Verifica o progresso da conversão."""
