@@ -20,7 +20,7 @@ from src.plugin_manager import PluginManager
 from src.icon_generator import create_icon_pixmap
 from src.draggable_toolbar import DraggableToolBar
 from src.draggable_tab_widget import DraggableTabWidget
-from src.preferences import Preferences
+from config.preferences import Preferences
 from src.signal_manager import SignalManager
 from src.theme import DARK_STYLESHEET
 from src.animations import AnimatedButton, AnimatedToolButton, UIAnimations, AnimatedListWidget
