@@ -1,0 +1,20 @@
+{"timestamp": "2026-01-17 22:12:56", "level": "INFO", "tool_key": "system", "class_name": "LogUtils", "message": "Sistema de logging iniciado", "extra_data": {}}
+{"timestamp": "2026-01-17 22:12:56", "level": "INFO", "tool_key": "main_window", "class_name": "MainWindow", "message": "Aplicação MTL_UTIL iniciada", "extra_data": {}}
+{"timestamp": "2026-01-17 22:12:56", "level": "INFO", "tool_key": "calculator", "class_name": "Calculator", "message": "Plugin Calculator inicializado", "extra_data": {}}
+{"timestamp": "2026-01-17 22:12:56", "level": "INFO", "tool_key": "calculator", "class_name": "Calculator", "message": "Plugin Calculator inicializado", "extra_data": {}}
+{"timestamp": "2026-01-17 22:12:58", "level": "DEBUG", "tool_key": "main_window", "class_name": "MainWindow", "message": "Tentativa de abrir plugin: Todo List", "extra_data": {}}
+{"timestamp": "2026-01-17 22:12:59", "level": "INFO", "tool_key": "main_window", "class_name": "MainWindow", "message": "Plugin Todo List aberto com sucesso", "extra_data": {}}
+{"timestamp": "2026-01-17 22:13:00", "level": "DEBUG", "tool_key": "main_window", "class_name": "MainWindow", "message": "Tentativa de abrir plugin: Text Viewer", "extra_data": {}}
+{"timestamp": "2026-01-17 22:13:00", "level": "INFO", "tool_key": "main_window", "class_name": "MainWindow", "message": "Plugin Text Viewer aberto com sucesso", "extra_data": {}}
+{"timestamp": "2026-01-17 22:13:00", "level": "DEBUG", "tool_key": "main_window", "class_name": "MainWindow", "message": "Tentativa de abrir plugin: Simple Browser", "extra_data": {}}
+{"timestamp": "2026-01-17 22:13:00", "level": "INFO", "tool_key": "main_window", "class_name": "MainWindow", "message": "Plugin Simple Browser aberto com sucesso", "extra_data": {}}
+{"timestamp": "2026-01-17 22:13:01", "level": "DEBUG", "tool_key": "main_window", "class_name": "MainWindow", "message": "Tentativa de abrir plugin: Calculator", "extra_data": {}}
+{"timestamp": "2026-01-17 22:13:01", "level": "DEBUG", "tool_key": "calculator", "class_name": "Calculator", "message": "Criando widget da calculadora", "extra_data": {}}
+{"timestamp": "2026-01-17 22:13:01", "level": "INFO", "tool_key": "calculator", "class_name": "Calculator", "message": "Widget da calculadora criado com sucesso", "extra_data": {}}
+{"timestamp": "2026-01-17 22:13:01", "level": "INFO", "tool_key": "main_window", "class_name": "MainWindow", "message": "Plugin Calculator aberto com sucesso", "extra_data": {}}
+{"timestamp": "2026-01-17 22:13:01", "level": "DEBUG", "tool_key": "main_window", "class_name": "MainWindow", "message": "Tentativa de abrir plugin: Simple Browser", "extra_data": {}}
+{"timestamp": "2026-01-17 22:13:01", "level": "INFO", "tool_key": "main_window", "class_name": "MainWindow", "message": "Plugin Simple Browser já estava aberto, aba ativada", "extra_data": {}}
+{"timestamp": "2026-01-17 22:13:06", "level": "DEBUG", "tool_key": "main_window", "class_name": "MainWindow", "message": "Abrindo visualizador de logs", "extra_data": {}}
+{"timestamp": "2026-01-17 22:13:06", "level": "INFO", "tool_key": "main_window", "class_name": "LogViewer", "message": "Janela de visualização de logs aberta", "extra_data": {}}
+{"timestamp": "2026-01-17 22:17:25", "level": "DEBUG", "tool_key": "main_window", "class_name": "MainWindow", "message": "Abrindo visualizador de logs", "extra_data": {}}
+{"timestamp": "2026-01-17 22:17:25", "level": "INFO", "tool_key": "main_window", "class_name": "LogViewer", "message": "Janela de visualização de logs aberta", "extra_data": {}}
