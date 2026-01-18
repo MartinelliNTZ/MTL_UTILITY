@@ -35,14 +35,18 @@ class TimeUtils:
         return datetime.now().strftime("%Y-%m-%d")
 
 
+import os
+
 class LogUtils:
     """Sistema de logging com rotação automática de arquivos."""
 
-    LOG_DIR = Path("config")
+    # Novo diretório de logs fixo no AppData do usuário
+    APPDATA_LOG_DIR = Path(os.getenv('LOCALAPPDATA', str(Path.home() / 'AppData' / 'Local'))) / 'MTL_UTIL' / 'logs'
     MAX_LOG_FILES = 2  # Manter apenas 2 arquivos de log
 
     def __init__(self):
-        self.LOG_DIR.mkdir(exist_ok=True)
+        self.LOG_DIR = self.APPDATA_LOG_DIR
+        self.LOG_DIR.mkdir(parents=True, exist_ok=True)
         self._current_log_file = None
         self._rotate_logs()
         self._create_new_log_file()

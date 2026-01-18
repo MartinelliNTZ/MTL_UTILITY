@@ -3,6 +3,7 @@ LogViewer - Ferramenta para visualização e análise de logs da aplicação.
 """
 
 import json
+import os
 from pathlib import Path
 from typing import List, Dict, Any
 from PySide6.QtWidgets import (
@@ -12,7 +13,7 @@ from PySide6.QtWidgets import (
 )
 from PySide6.QtCore import Qt, QTimer
 from PySide6.QtGui import QColor, QAction
-from utils.LogUtils import logger, LogLevel
+from utils.LogUtils import logger, LogLevel, LogUtils
 
 
 class LogEntry:
@@ -199,7 +200,12 @@ class LogViewer(QDialog):
 
     def _load_logs(self):
         """Carrega a lista de arquivos de log disponíveis."""
-        log_dir = Path("config")
+        # Usar o diretório de logs configurado em LogUtils
+        log_dir = LogUtils.APPDATA_LOG_DIR
+        
+        # Criar diretório se não existir
+        log_dir.mkdir(parents=True, exist_ok=True)
+        
         log_files = sorted(log_dir.glob("mtl_util_*.log"), key=lambda x: x.stat().st_mtime, reverse=True)
 
         self.file_combo.clear()

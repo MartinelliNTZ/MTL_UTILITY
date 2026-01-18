@@ -5,18 +5,26 @@ from utils.ToolKey import ToolKey
 from utils.LogUtils import logger
 
 
+import os
+
 class Preferences:
     """Gerencia preferências da aplicação salvas em JSON."""
     TOOL_KEY = ToolKey.PREFERENCES
     """Gerencia preferências da aplicação salvas em JSON."""
-    
-    def __init__(self, config_file: str = "config/config.json"):
+
+    # Novo diretório fixo para preferências no AppData do usuário
+    APPDATA_PREF_DIR = Path(os.getenv('LOCALAPPDATA', str(Path.home() / 'AppData' / 'Local'))) / 'MTL_UTIL' / 'preferences'
+
+    def __init__(self, config_file: str = None):
         """
         Inicializa o gerenciador de preferências.
-        
+
         Args:
-            config_file: Nome do arquivo de configuração JSON
+            config_file: Nome do arquivo de configuração JSON (opcional)
         """
+        if config_file is None:
+            self.APPDATA_PREF_DIR.mkdir(parents=True, exist_ok=True)
+            config_file = str(self.APPDATA_PREF_DIR / 'preferences.json')
         self.config_file = Path(config_file)
         self._data: Dict[str, Any] = {}
         self._load()

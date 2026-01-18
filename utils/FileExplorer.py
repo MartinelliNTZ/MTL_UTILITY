@@ -41,6 +41,9 @@ class FileExplorer:
         Returns:
             Lista de caminhos absolutos dos arquivos encontrados
         """
+        # Normalizar o caminho para usar separadores consistentes do sistema
+        folder_path = os.path.normpath(folder_path)
+        
         if not os.path.exists(folder_path):
             logger.warning(self.TOOL_KEY, "FileExplorer",
                           f"Pasta não encontrada: {folder_path}")
