@@ -1,6 +1,10 @@
-version = 2.1.0
+version = 2.2.0
 
 changelog = 
+    2.2.0
+    - organizacao de ico converter em padroes
+    2.1.1.1
+    -preferencias e logs colocados em appdata
     2.1.0
     - Ferramenta de Converter icon
     - Ajsutado ImageUtil e FolderUtil
