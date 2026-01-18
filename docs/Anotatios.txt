@@ -2,6 +2,7 @@ version = 2.2.0
 
 changelog = 
     2.2.0
+    - 
     - organizacao de ico converter em padroes
     2.1.1.1
     -preferencias e logs colocados em appdata
