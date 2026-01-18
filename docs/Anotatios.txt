@@ -2,7 +2,8 @@
 
 
 changeloh = 
-
+    2.1.0
+    
     2.0.1
     - Abas arrastáveis com suporte à reordenação
     - Animações de UI (fade-in, hover, click)
