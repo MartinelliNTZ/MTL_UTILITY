@@ -518,6 +518,9 @@ class ImageMerger(BasePlugin, PluginContainer):
 
     def on_base_path_changed(self, new_path: str) -> None:
         """Hook chamado quando pasta base muda."""
+        if not self.preferences:
+            return  # Ainda não foi inicializado
+        
         self.set_current_folder(new_path)
         self.load_images_from_current_folder()
 

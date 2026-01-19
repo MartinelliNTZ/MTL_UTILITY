@@ -39,14 +39,22 @@ class ICOConverter(BasePlugin, PluginContainer):
 
     def create_widget(self, parent=None) -> QWidget:
         logger.debug(self.TOOL_KEY, "ICOConverter", "Criando widget do conversor ICO")
-        
-        # Inicializar preferências aqui
+
         if self.preferences is None:
             from config.preferences import Preferences
             self.preferences = Preferences()
-            self.current_folder = self.preferences.get("ico_converter_current_folder", self.preferences.get_base_path())
+
+        if self.current_folder is None:
+            self.current_folder = self.preferences.get(
+                "ico_converter_current_folder",
+                self.preferences.get_base_path()
+            )
+
+        if self.executor is None:
             from concurrent.futures import ThreadPoolExecutor
             self.executor = ThreadPoolExecutor(max_workers=4)
+        
+        if self.file_explorer is None:
             # Inicializar FileExplorer com extensões suportadas
             self.file_explorer = FileExplorer(ImageFormats.get_supported_extensions(), recursive=True)
         
@@ -243,10 +251,13 @@ class ICOConverter(BasePlugin, PluginContainer):
         logger.info(self.TOOL_KEY, "ICOConverter", f"Resetado para pasta base: {base_path}")
 
     def set_current_folder(self, folder: str) -> None:
-        """Define a pasta atual."""
+        if not folder:
+            return
+
         self.current_folder = folder
         self.folder_label.setText(f"Pasta atual: {folder}")
         self.preferences.set("ico_converter_current_folder", folder)
+
 
     def load_images_from_current_folder(self) -> None:
         """Carrega imagens da pasta atual usando FileExplorer."""
@@ -444,11 +455,12 @@ class ICOConverter(BasePlugin, PluginContainer):
             QTimer.singleShot(100, self.check_conversion_progress)
 
     def on_base_path_changed(self, new_path: str) -> None:
-        """Atualiza quando a pasta base muda."""
-        if self.current_folder == self.preferences.get_base_path():
-            # Se estava na pasta base, atualizar
-            self.set_current_folder(new_path)
-            self.load_images_from_current_folder()
+        if not self.preferences:
+            return
+
+        self.set_current_folder(new_path)
+        self.load_images_from_current_folder()
+
         logger.info(self.TOOL_KEY, "ICOConverter", f"Pasta base alterada para: {new_path}")
 
 

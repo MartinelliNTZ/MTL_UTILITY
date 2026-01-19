@@ -97,6 +97,7 @@ class MainWindow(QMainWindow):
             "Todo List": "checklist",
             "ICO Converter": "ico_converter",
             "Image Merger": "image",
+            "Geographic Explorer": "plugins",
             "Text Viewer": "text",
         }
         

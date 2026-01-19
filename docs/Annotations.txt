@@ -5,6 +5,14 @@ changelog =
     - nova ferramenta de converter imagem
     - ajustado bug em icons convert
     - sample browser excluido
+    - bugs em andamento 
+    esse
+    Timestamp: 2026-01-18 23:11:06
+Tool Key: ico_converter
+Classe: ICOConverter
+Nível: WARNING
+Mensagem: Erro ao gerar thumbnail: cannot identify image file 'C:\\Users\\marti\\Documents\\#TeraBox Upload\\#PROJETOS\\A - QGIS PROJECTS\\GERAL-RSFAZENDAS\\PROJETOS\\MAPAS DE PRODUTIVIDADE\\SR38\\primario\\LEGENDA.tif'
+    ico converte nao ta salvando os check nas preferencias
     2.1.1.1
     -preferencias e logs colocados em appdata
     2.1.0
