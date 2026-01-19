@@ -13,7 +13,7 @@ class ToolKey:
     # Plugins
     CALCULATOR = "calculator"
     TODO_LIST = "todo_list"
-    SIMPLE_BROWSER = "simple_browser"
+    IMAGE_MERGER = "image_merger"
     TEXT_VIEWER = "text_viewer"
     ICO_CONVERTER = "ico_converter"
 

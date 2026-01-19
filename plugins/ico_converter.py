@@ -424,10 +424,18 @@ class ICOConverter(BasePlugin, PluginContainer):
 
             if success_count > 0:
                 from PySide6.QtWidgets import QApplication
-                QMessageBox.information(
-                    QApplication.activeWindow(), "Concluído",
-                    f"Conversão finalizada!\n{success_count} imagens convertidas com sucesso.\n{failed} falhas."
-                )
+                msg_box = QMessageBox(QApplication.activeWindow())
+                msg_box.setWindowTitle("Concluído")
+                msg_box.setText(f"Conversão finalizada!\n{success_count} imagens convertidas com sucesso.\n{failed} falhas.")
+                msg_box.setIcon(QMessageBox.Information)
+                open_btn = msg_box.addButton("Abrir Pasta", QMessageBox.ActionRole)
+                msg_box.addButton("OK", QMessageBox.AcceptRole)
+                msg_box.exec()
+                if msg_box.clickedButton() == open_btn:
+                    import subprocess
+                    import os
+                    output_dir = self.preferences.get_base_path()
+                    subprocess.Popen(f'explorer /select,"{output_dir}"')
 
             logger.info(self.TOOL_KEY, "ICOConverter",
                        f"Conversão concluída: {success_count} sucesso, {failed} falhas")

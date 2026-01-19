@@ -2,6 +2,4 @@
 Módulo de estilos para plugins.
 """
 
-from src.styles.ICOConverterStyles import ICOConverterStyles
-
-__all__ = ['ICOConverterStyles']
+from styles.ICOConverterStyles import ICOConverterStyles

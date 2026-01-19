@@ -95,6 +95,8 @@ class MainWindow(QMainWindow):
         icon_map = {
             "Calculator": "calculator",
             "Todo List": "checklist",
+            "ICO Converter": "ico_converter",
+            "Image Merger": "image",
             "Simple Browser": "browser",
             "Text Viewer": "text",
         }
