@@ -16,7 +16,7 @@ from PySide6.QtCore import Qt, QTimer, QSize
 
 from src.base_plugin import BasePlugin
 from src.plugin_ui_helper import PluginUIHelper, PluginContainer, PluginStyleSheet
-from src.styles.ICOConverterStyles import ICOConverterStyles
+from styles.ICOConverterStyles import ICOConverterStyles
 from utils.ImageUtil import ImageUtil, ImageFormats
 from utils.FileExplorer import FileExplorer
 from utils.ToolKey import ToolKey
