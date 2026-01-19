@@ -2,8 +2,9 @@ version = 2.2.0
 
 changelog = 
     2.2.0
-    - 
-    - organizacao de ico converter em padroes
+    - nova ferramenta de converter imagem
+    - ajustado bug em icons convert
+    - sample browser excluido
     2.1.1.1
     -preferencias e logs colocados em appdata
     2.1.0

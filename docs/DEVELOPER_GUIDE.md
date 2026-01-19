@@ -13,7 +13,7 @@ TESTE/
 ├── plugins/
 │   ├── calculator.py          # ✅ Refatorado - 99 linhas
 │   ├── todo_list.py           # ✅ Refatorado - 89 linhas
-│   ├── sample_browser.py      # ✅ Refatorado - 89 linhas
+
 │   ├── sample_text_viewer.py  # ✅ Refatorado - 82 linhas
 │   └── __init__.py
 ├── src/

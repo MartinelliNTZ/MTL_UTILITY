@@ -327,7 +327,7 @@ def check_merge_progress(self):
 
 | Aspecto | Decisão | Justificativa |
 |---------|---------|-------------|
-| **Novo Plugin** | Substituir `sample_browser.py` | Mesmo padrão ICO Converter |
+
 | **Novo Util** | Criar `PDFUtil` | Responsabilidade única (batch) |
 | **Novo Style** | Criar `ImageMergerStyles` | Estilos específicos |
 | **UI Pattern** | Similar ICO Converter | Reutilizar padrões |
