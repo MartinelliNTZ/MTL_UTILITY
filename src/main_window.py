@@ -21,7 +21,7 @@ from src.icon_generator import create_icon_pixmap
 from src.animations import AnimatedToolButton, AnimatedButton, AnimatedListWidget, UIAnimations
 from src.draggable_tab_widget import DraggableTabWidget
 from src.draggable_toolbar import DraggableToolBar
-from src.log_viewer import LogViewer
+from config.log_viewer import LogViewer
 from config.preferences import Preferences
 from src.signal_manager import SignalManager
 from src.theme import DARK_STYLESHEET

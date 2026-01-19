@@ -23,7 +23,7 @@ a = Analysis(
         'src.animations',
         'src.draggable_tab_widget',
         'src.draggable_toolbar',
-        'src.log_viewer',
+        'config.log_viewer',
         'config.preferences',
         'src.signal_manager',
         'src.theme',

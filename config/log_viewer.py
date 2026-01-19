@@ -303,26 +303,31 @@ class LogViewer(QDialog):
 
             # Data/Hora
             time_item = QTableWidgetItem(entry.timestamp)
+            time_item.setData(Qt.UserRole, row)  # Armazenar índice da entrada
             self.table.setItem(row, 0, time_item)
 
             # ToolKey (texto colorido)
             toolkey_item = QTableWidgetItem(entry.tool_key)
             color = QColor(self.TOOL_KEY_COLORS.get(entry.tool_key, '#FFFFFF'))
             toolkey_item.setForeground(color)
+            toolkey_item.setData(Qt.UserRole, row)  # Armazenar índice da entrada
             self.table.setItem(row, 1, toolkey_item)
 
             # Classe
             class_item = QTableWidgetItem(entry.class_name)
+            class_item.setData(Qt.UserRole, row)  # Armazenar índice da entrada
             self.table.setItem(row, 2, class_item)
 
             # Nível (texto colorido)
             level_item = QTableWidgetItem(entry.level)
             level_color = QColor(self.LEVEL_COLORS.get(entry.level, '#FFFFFF'))
             level_item.setForeground(level_color)
+            level_item.setData(Qt.UserRole, row)  # Armazenar índice da entrada
             self.table.setItem(row, 3, level_item)
 
             # Mensagem
             message_item = QTableWidgetItem(entry.message)
+            message_item.setData(Qt.UserRole, row)  # Armazenar índice da entrada
             self.table.setItem(row, 4, message_item)
 
         self.table.setSortingEnabled(True)  # Reabilitar ordenação
@@ -337,14 +342,15 @@ class LogViewer(QDialog):
 
     def _on_selection_changed(self):
         """Chamado quando a seleção da tabela muda."""
-        selected_rows = set()
-        for item in self.table.selectedItems():
-            selected_rows.add(item.row())
-
-        if len(selected_rows) == 1:
-            row = list(selected_rows)[0]
-            if row < len(self.filtered_entries):
-                entry = self.filtered_entries[row]
+        selected_items = self.table.selectedItems()
+        
+        if len(selected_items) > 0:
+            # Pegar o índice armazenado no item selecionado
+            item = selected_items[0]
+            entry_index = item.data(Qt.UserRole)
+            
+            if entry_index is not None and entry_index < len(self.filtered_entries):
+                entry = self.filtered_entries[entry_index]
                 details = f"""Timestamp: {entry.timestamp}
 Tool Key: {entry.tool_key}
 Classe: {entry.class_name}
